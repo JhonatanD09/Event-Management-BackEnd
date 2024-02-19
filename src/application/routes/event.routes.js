@@ -108,6 +108,6 @@ router.get('/all',[verifyToken], controller.getAllEvents)
  *      security:
  *	        - jwt: []
  */
- router.delete('delete/:id',[verifyToken],controller.deleteById)
+ router.delete('/delete/:id',[verifyToken],controller.deleteById)
 
 module.exports = router
