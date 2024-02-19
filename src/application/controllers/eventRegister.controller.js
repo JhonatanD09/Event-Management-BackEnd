@@ -1,5 +1,7 @@
-import {register,cancelRegister,getByUser,getByEvent} from '../../domain/models/EventRegister'
-import {getById} from '../../domain/models/Event'
+import {register,cancelRegister,getByUser,
+        getByEvent,getUsersQuantityInEvent,
+        getAllEventsWithRegisters} from '../../domain/models/EventRegister'
+import {getById , getAll} from '../../domain/models/Event'
 import {findById} from '../../domain/models/User'
 
 const registerEvent = async(req,res)=>{
@@ -69,10 +71,61 @@ const getUsersByEvent = async (req,res)=>{
 }
 
 const reportUsersByDay = async (req,res)=>{
-    console.log('report')
+    try{
+        let query = await getAllEventsWithRegisters()
+        const matrix = [];
+        await createMatrix(query, matrix)
+
+        let days = fillReport(matrix)
+        res.status(200).json(days)
+    }catch{
+        res.status(404).send('Reporte no generado')
+    }
+
+    
+}
+
+const createReportDaysList = () => {
+    return [
+        { day: 'Domingo', assistants: 0 },
+        { day: 'Lunes', assistants: 0 },
+        { day: 'Martes', assistants: 0 },
+        { day: 'Miércoles', assistants: 0 },
+        { day: 'Jueves', assistants: 0 },
+        { day: 'Viernes', assistants: 0 },
+        { day: 'Sábado', assistants: 0 }
+    ]
+}
+
+const createMatrix = async  (query, matrix) => {
+    for (const item of query[0]) {
+        let row = []
+        let day = item.date.getDay()
+        let queryQuantity = await getUsersQuantityInEvent(item.id_event)
+        let quantity = queryQuantity[0][0].quantity
+        for (let i = 0; i < 7; i++) {
+            i == day ? row.push(quantity) : row.push(0)
+        }
+        matrix.push(row)
+    }
+}
+
+const fillReport = (matrix) =>{
+    let days = createReportDaysList()
+    for (let i = 0; i < matrix[0].length; i++) {
+        let result = 0
+        for (let j = 0; j < matrix.length; j++) {
+            result += matrix[j][i]
+        }
+        days[i].assistants = result
+    }
+    return days
 }
 
 
 module.exports = {
     registerEvent,cancelRegisterEvent,getEventsByUser, getUsersByEvent,reportUsersByDay
 }
+
+
+

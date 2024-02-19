@@ -25,10 +25,14 @@ const getByEvent = async (id_event)=>{
     ' JOIN countries cs ON s.id_country = cs.id_country WHERE id_event = ?', [id_event])
 }
 
+const getAllEventsWithRegisters = async()=>{
+    return (await pool).query('SELECT e.id_event, e.date FROM events e INNER JOIN register_events re ON e.id_event = re.id_event')
+}
+
 const getUsersQuantityInEvent = async (id_event)=>{
     return  (await pool).query('SELECT count(*) as quantity FROM register_events  WHERE id_event =?', [id_event])
 }
 
 module.exports = {
-    register,cancelRegister,getByUser,getByEvent, getUsersQuantityInEvent
+    register,cancelRegister,getByUser,getByEvent, getUsersQuantityInEvent,getAllEventsWithRegisters
 }
