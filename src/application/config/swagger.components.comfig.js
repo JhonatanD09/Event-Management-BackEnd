@@ -5,8 +5,20 @@ module.exports = {
             Login: {
                 type: "object",
                 properties: {
-                    userName: { type: "string" },
+                    email: { type: "string" },
                     password: { type: "string" }
+                }
+            },
+            User: {
+                type: "object",
+                properties: {
+                    name: { type: "string" },
+                    email: { type: "string" },
+                    password: { type: "string" },
+                    phone_number: { type: "number" },
+                    address: { type: "string" },
+                    id_rol: { type: "number" },
+                    id_city: { type: "number" },
                 }
             },
 
