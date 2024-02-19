@@ -3,6 +3,7 @@ const express = require('express')
 const router = express.Router()
 const controller = require('../controllers/event.controller')
 
+
 /**
  * @swagger
  * /api/v1/event/create:
@@ -23,7 +24,31 @@ const controller = require('../controllers/event.controller')
  *      security:
  *	        - jwt: []
  */
-router.post('/create',[verifyToken], controller.addEvent)
+router.post('/create',[verifyToken],controller.addEvent)
+
+
+
+/**
+ * @swagger
+ * /api/v1/event/create/massive:
+ *  post:
+ *      sumary : create a new user
+ *      tags : [Event]
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Event'
+ *      responses:
+ *          201:
+ *              description : new user created!
+ *          400:
+ *              description: error to create user
+ *      security:
+ *	        - jwt: []
+ */
+ router.post('/create/massive',[verifyToken],controller.addEventMassive)
 
 
 /**
@@ -109,5 +134,7 @@ router.get('/all',[verifyToken], controller.getAllEvents)
  *	        - jwt: []
  */
  router.delete('/delete/:id',[verifyToken],controller.deleteById)
+
+
 
 module.exports = router

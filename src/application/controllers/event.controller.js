@@ -1,4 +1,19 @@
 import {createEvent,getAll, getById,editEvent, deleteEvent} from '../../domain/models/Event'
+import multer from "multer"
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "src/upload/");
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname +'.xlsx');
+    },
+});
+ 
+const  upload = multer({
+    storage: storage,
+}).single("dataEvents");
+
 
 const addEvent = async(req,res)=>{
     try{
@@ -46,6 +61,17 @@ const deleteById = async(req,res)=>{
     }
 }
 
+const addEventMassive = (req, res)=>{
+    try{
+        upload(req,res, function(err){
+            if(err){console.log(err)}else{res.send('ok')}
+        })
+        
+    }catch{
+        console.log("falla")
+    }    
+}
+
 module.exports = {
-    addEvent, getAllEvents, getEventById, updateEvent,deleteById
+    addEvent, getAllEvents, getEventById, updateEvent,deleteById,addEventMassive
 }

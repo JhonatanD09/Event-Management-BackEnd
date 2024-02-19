@@ -61,7 +61,7 @@ router.get('/search/:id',[verifyToken], controller.searchById)
  *      sumary : editUser
  *      tags : [User]
  *      parameters:
- *          - in : path
+ *          - in : paths'
  *            name: id
  *            schema:
  *              type: string
