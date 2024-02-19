@@ -21,6 +21,21 @@ module.exports = {
                     id_city: { type: "number" },
                 }
             },
+            Event: {
+                type: "object",
+                properties: {
+                    name: { type: "string" },
+                    description: { type: "string" },
+                    date: { 
+                        type: "date",
+                        pattern: "/([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/",
+                        example: "YYYY-MM-DD" 
+                        },
+                    hour: { type: "string" },
+                    address: { type: "string" },
+                    id_city: { type: "number" },
+                }
+            },
 
             
         },

@@ -1,3 +1,4 @@
+import {verifyToken} from '../config/jwtCheck'
 const express = require('express')
 const router = express.Router()
 const controller = require('../../application/controllers/user.controller')
@@ -22,7 +23,7 @@ const controller = require('../../application/controllers/user.controller')
  *      security:
  *	        - jwt: []
  */
-router.post('/create', controller.create)
+router.post('/create',[verifyToken], controller.create)
 
 /**
  * @swagger
@@ -51,7 +52,7 @@ router.post('/create', controller.create)
  *      security:
  *	        - jwt: []
  */
-router.get('/search/:id', controller.searchById)
+router.get('/search/:id',[verifyToken], controller.searchById)
 
 /**
  * @swagger
@@ -80,7 +81,7 @@ router.get('/search/:id', controller.searchById)
  *      security:
  *	        - jwt: []
  */
-router.put('/update/:id', controller.updateUser)
+router.put('/update/:id',[verifyToken], controller.updateUser)
 
 /**
  * @swagger
@@ -103,6 +104,6 @@ router.put('/update/:id', controller.updateUser)
  *      security:
  *	        - jwt: []
  */
-router.delete('/delete/:id', controller.deleteUserById)
+router.delete('/delete/:id',[verifyToken], controller.deleteUserById)
 
 module.exports = router
