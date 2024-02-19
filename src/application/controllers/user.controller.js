@@ -1,4 +1,6 @@
-import {createUser , findByEmail,editUser, findById,deleteUser,encryptPass} from '../../domain/models/User'
+import {createUser , findByEmail,editUser, findById,deleteUser,encryptPass,getCompleteAddress} from '../../domain/models/User'
+import {getAllAddresses} from '../../domain/models/Event'
+import {getCoorByAddress,distance} from '../../infraestructure/map/mapBoxChoose'
 
 const create = async (req,res)=>{
     const user = await concatUserInfo(req.body, res)
@@ -57,6 +59,49 @@ const concatUserInfo = async (info) =>{
     }
 }
 
-module.exports = {
-  create,searchById,updateUser,deleteUserById
+const getNearbyLocations = async (req, res)=>{
+    console.log(req.params.id)
+    try{
+        const user = await findById(req.params.id)
+        if(user[0].length>0){
+            const { lat, lon } = await userLatAndLon(req)
+            console.log(lat,lon)
+            const eventCoords = await calculateCoordsToEvents()
+
+            let distanceTest = distance(lat,lon,eventCoords[0].lat,eventCoords[0].lon)
+            console.log(distanceTest)
+       
+            console.log(eventCoords)
+        }else{
+            res.status(404).json({message: 'Usuario no encontrado'})
+        }
+    }catch(err){
+        console.log(err)
+    }
 }
+
+module.exports = {
+  create,searchById,updateUser,deleteUserById,getNearbyLocations
+}
+
+const   userLatAndLon = async(req) => {
+    const address = await getCompleteAddress(req.params.id)
+    const data = await getCoorByAddress(address[0][0].full_address)
+    const coor = data.data.features[0].geometry.coordinates
+    const lat = coor[1]
+    const lon = coor[0]
+    return { lat, lon }
+}
+const  calculateCoordsToEvents = async() =>{
+    const eventAdress = await getAllAddresses()
+    const eventCoords = []
+    for (const item of eventAdress[0]) {
+        const data = await getCoorByAddress(item.full_address)
+        const coor = data.data.features[0].geometry.coordinates
+        const lat = coor[1]
+        const lon = coor[0]
+        eventCoords.push({ id: item.id_event, lat: lat, lon: lon })
+    }
+    return eventCoords
+}
+

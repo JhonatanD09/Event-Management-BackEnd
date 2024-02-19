@@ -1,6 +1,6 @@
 import {createEvent,getAll, getById,editEvent, deleteEvent} from '../../domain/models/Event'
 import multer from "multer"
-import { loadData } from '../../infraestructure/database/fileLoad';
+import { loadData } from '../../infraestructure/files/fileLoad';
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {

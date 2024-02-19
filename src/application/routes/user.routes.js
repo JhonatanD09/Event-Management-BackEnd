@@ -106,4 +106,6 @@ router.put('/update/:id',[verifyToken], controller.updateUser)
  */
 router.delete('/delete/:id',[verifyToken], controller.deleteUserById)
 
+router.get('/getNearbyLocations/:id',[verifyToken], controller.getNearbyLocations)
+
 module.exports = router

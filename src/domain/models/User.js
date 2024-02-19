@@ -21,6 +21,11 @@ const deleteUser = async (id)=>{
     return (await pool).query('DELETE FROM users WHERE id_user = ?', id)
 }
 
+const getCompleteAddress = async(id_user)=>{
+    return (await pool).query(`SELECT CONCAT(u.address,' ', c.name ,' ', s.state_name,' ', co.country_name)  full_address `+
+    `FROM users u JOIN cities c ON u.id_city = c.id_city JOIN states s ON c.id_state = s.id_state `+
+    `JOIN countries co ON s.id_country = co.id_country WHERE u.id_user = ?`, [id_user])
+}
 
 const encryptPass = async (password) => {
     const salt = await bcrypt.genSalt(10);
@@ -38,5 +43,6 @@ module.exports = {
     findById,
     editUser,
     deleteUser,
-    findByEmail
+    findByEmail,
+    getCompleteAddress
 }

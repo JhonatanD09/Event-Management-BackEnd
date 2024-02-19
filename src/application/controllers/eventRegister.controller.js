@@ -75,7 +75,6 @@ const reportUsersByDay = async (req,res)=>{
         let query = await getAllEventsWithRegisters()
         const matrix = [];
         await createMatrix(query, matrix)
-
         let days = fillReport(matrix)
         res.status(200).json(days)
     }catch{
