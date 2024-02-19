@@ -37,8 +37,8 @@ router.post('/create',[verifyToken],controller.addEvent)
  *      requestBody:
  *          required: true
  *          content:
- *              application/json:
- *                  schema:
+ *              multipart/form-data:
+ *                 schema:
  *                      $ref: '#/components/schemas/Event'
  *      responses:
  *          201:
@@ -73,6 +73,13 @@ router.get('/all',[verifyToken], controller.getAllEvents)
  *  get:
  *      sumary : create a new user
  *      tags : [Event]
+ *      parameters:
+ *          - in : path
+ *            name: id
+ *            schema:
+ *              type: string
+ *            required: true
+ *            description : user id
  *      responses:
  *          201:
  *              description : new user created!
@@ -101,7 +108,7 @@ router.get('/all',[verifyToken], controller.getAllEvents)
  *          content:
  *              application/json:
  *                  schema:
- *                      $ref: '#/components/schemas/Event'
+ *                      $ref: '#/components/schemas/EventLoad'
  *      responses:
  *          201:
  *              description : Event edit!
@@ -111,6 +118,29 @@ router.get('/all',[verifyToken], controller.getAllEvents)
  *	        - jwt: []
  */
  router.put('/update/:id',[verifyToken],controller.updateEvent)
+
+ /**
+ * @swagger
+ * /api/v1/event/update/load/massive:
+ *  put:
+ *      sumary : create a new user
+ *      tags : [Event]
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              multipart/form-data:
+ *                 schema:
+ *                      $ref: '#/components/schemas/EventUpdate'
+ *      responses:
+ *          201:
+ *              description : new user created!
+ *          400:
+ *              description: error to create user
+ *      security:
+ *	        - jwt: []
+ */
+ router.put('/update/load/massive',[verifyToken],controller.updateEventMassive)
+
 
  /**
  * @swagger

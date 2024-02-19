@@ -1,5 +1,6 @@
 import {createEvent,getAll, getById,editEvent, deleteEvent} from '../../domain/models/Event'
 import multer from "multer"
+import { loadData } from '../../infraestructure/database/fileLoad';
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -61,10 +62,44 @@ const deleteById = async(req,res)=>{
     }
 }
 
-const addEventMassive = (req, res)=>{
+const addEventMassive =  (req, res)=>{
     try{
         upload(req,res, function(err){
-            if(err){console.log(err)}else{res.send('ok')}
+            if(err){
+                console.log(err)
+            }
+            else{
+                let events = loadData()
+                events.forEach(async (event)=>{
+                   await createEvent(event)
+                })
+                res.status(200).send('Carga completada')
+            }
+        })
+        
+    }catch{
+        console.log("falla")
+    }    
+}
+
+const updateEventMassive =  (req, res)=>{
+    try{
+        upload(req,res, function(err){
+            if(err){
+                console.log(err)
+            }
+            else{
+                let events = loadData()
+                events.forEach(async (event)=>{{
+                    const eventInDb = await getById(event.id_event)
+                    if(eventInDb[0].length>0){
+                        await editEvent(event, event.id_event)
+                    }else{
+                        res.status(404).json({message:'Evento no encontrado'})
+                    }
+                }})
+                res.send('Carga completada')
+            }
         })
         
     }catch{
@@ -73,5 +108,5 @@ const addEventMassive = (req, res)=>{
 }
 
 module.exports = {
-    addEvent, getAllEvents, getEventById, updateEvent,deleteById,addEventMassive
+    addEvent, getAllEvents, getEventById, updateEvent,deleteById,addEventMassive,updateEventMassive
 }
