@@ -42,9 +42,9 @@ const createDefaulUser = async () =>{
     const userDef = {
         name: 'Admin',
         email: 'Admin@gmail.com',
-        password: 'admin',
+        password: await encryptPass('admin'),
         address: 'calle 12',
-        phone: '3203961541',
+        phone_number: '3203961541',
         id_rol: 1,
         id_city: 1,
     }

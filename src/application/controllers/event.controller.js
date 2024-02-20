@@ -7,7 +7,7 @@ var storage = multer.diskStorage({
         cb(null, "src/upload/");
     },
     filename: function (req, file, cb) {
-        cb(null, file.fieldname +'.xlsx');
+        cb(null, file.originalname);
     },
 });
  
@@ -70,13 +70,16 @@ const addEventMassive =  (req, res)=>{
                 console.log(err)
             }
             else{
-                let events = loadData()
+                if(req.file){
+                let events = loadData('plantilla_load.xlsx')
                 events.forEach(async (event)=>{
                    await createEvent(event)
                 })
                 res.status(200).send('Carga completada')
+            }else{
+                res.status(404).json({message:'No se encontro archivo'})
             }
-        })
+            }})
         
     }catch{
         console.log("falla")
@@ -84,13 +87,16 @@ const addEventMassive =  (req, res)=>{
 }
 
 const updateEventMassive =  (req, res)=>{
+    console.log('req.body')
     try{
         upload(req,res, function(err){
+            console.log(req.file)
             if(err){
                 console.log(err)
             }
             else{
-                let events = loadData()
+                if(req.file){
+                let events = loadData('plantilla_edit.xlsx')
                 events.forEach(async (event)=>{{
                     const eventInDb = await getById(event.id_event)
                     if(eventInDb[0].length>0){
@@ -99,8 +105,11 @@ const updateEventMassive =  (req, res)=>{
                         res.status(404).json({message:'Evento no encontrado'})
                     }
                 }})
-                res.send('Carga completada')
-            }
+                res.status(200).send('Carga completada')
+            }else{
+                res.status(404).json({message:'No se encontro archivo'})
+            }}
+
         })
         
     }catch{

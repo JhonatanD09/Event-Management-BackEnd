@@ -1,11 +1,11 @@
 
 const reader = require('xlsx') 
-  
-const file = reader.readFile('src/upload/dataEvents.xlsx')
 
-let events = []
 
-const loadData = ()=>{
+
+const loadData = (name)=>{
+    let events = []
+    const file = reader.readFile(`src/upload/${name}`)
     const sheets = file.SheetNames 
   
     for(let i = 0; i < sheets.length; i++) 
