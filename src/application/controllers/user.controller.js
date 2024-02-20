@@ -1,5 +1,5 @@
 import {createUser , findByEmail,editUser, findById,deleteUser,encryptPass,getCompleteAddress} from '../../domain/models/User'
-import {getAllAddresses} from '../../domain/models/Event'
+import {getAllAddresses,getById} from '../../domain/models/Event'
 import {getCoorByAddress,distance} from '../../infraestructure/map/mapBoxChoose'
 
 const create = async (req,res)=>{
@@ -22,8 +22,12 @@ const create = async (req,res)=>{
 const searchById = async (req, res)=>{
     try{
         const user = await findById(req.params.id)
-        res.status(200).json({user: user[0]})
-    }catch{
+        if(user[0].length>0)
+            res.status(200).json({user: user[0]})
+        else
+        res.status(404).json({message:'Usuario no encontrado'})
+    }catch(err){
+        console.log(err)
         res.status(404).json({message:'Usuario no encontrado'})
     }
 }
@@ -32,16 +36,26 @@ const updateUser = async (req, res)=>{
     try{
         await editUser(await concatUserInfo(req.body),req.params.id)
         const user = await findById(req.params.id)
-        res.status(200).json({user: user[0]})
-    }catch{
+        if(user[0].length>0)
+            res.status(200).json({user: user[0]})
+        else
+            res.status(404).json({message:'Usuario no encontrado'})
+    }catch(err){
+        console.log(err)
         res.status(404).json({message:'Usuario no actualizado'})
     }
 }
 
 const deleteUserById = async (req, res)=>{
     try{
-        await deleteUser(req.params.id)
-        res.status(200).json({message: 'Usuario eliminado correctamente'})
+        const user = await findById(req.params.id)
+        if(user[0].length>0){
+            await deleteUser(req.params.id)
+            res.status(200).json({message: 'Usuario eliminado correctamente'})
+        
+        }else{
+            res.status(404).json({message:'Usuario no encontrado'})
+        }
     }catch{
         res.status(404).json({message: 'Usuario no eliminado'})
     }
@@ -60,18 +74,20 @@ const concatUserInfo = async (info) =>{
 }
 
 const getNearbyLocations = async (req, res)=>{
-    console.log(req.params.id)
+    let distanceUser = req.body.distance
     try{
         const user = await findById(req.params.id)
         if(user[0].length>0){
             const { lat, lon } = await userLatAndLon(req)
-            console.log(lat,lon)
             const eventCoords = await calculateCoordsToEvents()
-
-            let distanceTest = distance(lat,lon,eventCoords[0].lat,eventCoords[0].lon)
-            console.log(distanceTest)
-       
-            console.log(eventCoords)
+            const eventsInRange= []
+            for (const item of eventCoords) {
+                if(distance(lat,lon,item.lat,item.lon)<=distanceUser){
+                    let eventInRange = await getById(item.id)
+                    eventsInRange.push(eventInRange[0][0])
+                }
+            }
+            res.status(200).json(eventsInRange)
         }else{
             res.status(404).json({message: 'Usuario no encontrado'})
         }

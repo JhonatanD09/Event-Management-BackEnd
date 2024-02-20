@@ -1,8 +1,13 @@
 const express = require('express');
 import { SWAGGER_SERVE,SWAGGER_SETUP } from './application/config/swagger.config';
+import {createDefaulUser} from './domain/models/User'
 const app = express();
 
 app.use(express.json());
+
+//usuario default
+
+createDefaulUser()
 
 //endpoints
 

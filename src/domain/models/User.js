@@ -7,6 +7,7 @@ const createUser = async (user)=>{
 
 const findById = async (id)=>{
     return (await pool).query('SELECT * FROM users WHERE id_user = ?', id)
+    
 }
 
 const findByEmail = async (email)=>{
@@ -36,6 +37,12 @@ const comparePass = async (password, receivedPass) => {
     return await bcrypt.compare(password, receivedPass);
 };
 
+const createDefaulUser = async () =>{
+    const verifyUsers = (await pool).query('SELECT * FROM users ')
+    console.log(verifyUsers)
+    // (await pool).query('INSERT INTO USERS SET ?')
+}
+
 module.exports = {
     createUser,
     encryptPass,
@@ -44,5 +51,6 @@ module.exports = {
     editUser,
     deleteUser,
     findByEmail,
-    getCompleteAddress
+    getCompleteAddress,
+    createDefaulUser
 }

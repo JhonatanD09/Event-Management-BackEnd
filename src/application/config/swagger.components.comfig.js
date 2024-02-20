@@ -74,6 +74,12 @@ module.exports = {
                     id_event: {type :"number"},
                 }
             },
+            Ubication: {
+                type: "object",
+                properties: {
+                    distance: {type :"number"},
+                }
+            },
 
             
         },

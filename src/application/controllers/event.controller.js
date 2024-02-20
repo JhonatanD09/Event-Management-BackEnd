@@ -48,7 +48,8 @@ const updateEvent = async(req,res)=>{
         await editEvent(req.body, req.params.id)
         const event = await getById(req.params.id)
         res.status(200).json({event:event[0]})
-    }catch{
+    }catch(err){
+        console.log(err)
         res.status(404).json({message:'No se encontro el evento'})
     }
 }

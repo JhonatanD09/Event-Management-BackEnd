@@ -7,6 +7,7 @@ import {findById} from '../../domain/models/User'
 const registerEvent = async(req,res)=>{
     try{
         const user = await findById(req.body.id_user)
+        console.log(user[0])
         if(user[0].length>0){
             const event = await getById(req.body.id_event)
             if(event[0].length>0){
