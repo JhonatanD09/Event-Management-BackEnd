@@ -8,7 +8,7 @@ const controller = require('../controllers/event.controller')
  * @swagger
  * /api/v1/event/create:
  *  post:
- *      sumary : create a new user
+ *      sumary : create a new event
  *      tags : [Event]
  *      requestBody:
  *          required: true
@@ -18,9 +18,9 @@ const controller = require('../controllers/event.controller')
  *                      $ref: '#/components/schemas/Event'
  *      responses:
  *          201:
- *              description : new user created!
+ *              description : new event created!
  *          400:
- *              description: error to create user
+ *              description: error to create event
  *      security:
  *	        - jwt: []
  */
@@ -32,7 +32,7 @@ router.post('/create',[verifyToken],controller.addEvent)
  * @swagger
  * /api/v1/event/create/massive:
  *  post:
- *      sumary : create a new user
+ *      sumary : create massive events
  *      tags : [Event]
  *      requestBody:
  *          required: true
@@ -42,9 +42,9 @@ router.post('/create',[verifyToken],controller.addEvent)
  *                      $ref: '#/components/schemas/Event'
  *      responses:
  *          201:
- *              description : new user created!
+ *              description : massive events created!
  *          400:
- *              description: error to create user
+ *              description: error to create events
  *      security:
  *	        - jwt: []
  */
@@ -55,13 +55,13 @@ router.post('/create',[verifyToken],controller.addEvent)
  * @swagger
  * /api/v1/event/all:
  *  get:
- *      sumary : create a new user
+ *      sumary : get events
  *      tags : [Event]
  *      responses:
  *          201:
- *              description : new user created!
+ *              description : ok
  *          400:
- *              description: error to create user
+ *              description: evenst not found
  *      security:
  *	        - jwt: []
  */
@@ -71,7 +71,7 @@ router.get('/all',[verifyToken], controller.getAllEvents)
  * @swagger
  * /api/v1/event/search/{id}:
  *  get:
- *      sumary : create a new user
+ *      sumary : search event by id
  *      tags : [Event]
  *      parameters:
  *          - in : path
@@ -94,7 +94,7 @@ router.get('/all',[verifyToken], controller.getAllEvents)
  * @swagger
  * /api/v1/event/update/{id}:
  *  put:
- *      sumary : editEvent
+ *      sumary : edit Event
  *      tags : [Event]
  *      parameters:
  *          - in : path
@@ -123,7 +123,7 @@ router.get('/all',[verifyToken], controller.getAllEvents)
  * @swagger
  * /api/v1/event/update/load/massive:
  *  put:
- *      sumary : create a new user
+ *      sumary : edit massive event
  *      tags : [Event]
  *      requestBody:
  *          required: true
@@ -133,9 +133,9 @@ router.get('/all',[verifyToken], controller.getAllEvents)
  *                      $ref: '#/components/schemas/EventUpdate'
  *      responses:
  *          201:
- *              description : new user created!
+ *              description : ok
  *          400:
- *              description: error to create user
+ *              description: error to edit 
  *      security:
  *	        - jwt: []
  */

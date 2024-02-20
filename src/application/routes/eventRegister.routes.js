@@ -7,7 +7,7 @@ const controller = require('../controllers/eventRegister.controller')
  * @swagger
  * /api/v1/register/:
  *  post:
- *      sumary : create a new user
+ *      sumary : register event
  *      tags : [Register]
  *      requestBody:
  *          required: true
@@ -17,9 +17,9 @@ const controller = require('../controllers/eventRegister.controller')
  *                      $ref: '#/components/schemas/Register'
  *      responses:
  *          201:
- *              description : new user created!
+ *              description : new register created!
  *          400:
- *              description: error to create user
+ *              description: error to create register
  *      security:
  *	        - jwt: []
  */
@@ -39,9 +39,9 @@ router.post('/',[verifyToken], controller.registerEvent)
  *                      $ref: '#/components/schemas/Register'
  *      responses:
  *          201:
- *              description : new user created!
+ *              description : Delete event register
  *          400:
- *              description: error to create user
+ *              description: error to delete event register
  *      security:
  *	        - jwt: []
  */
@@ -51,7 +51,7 @@ router.post('/',[verifyToken], controller.registerEvent)
  * @swagger
  * /api/v1/event/searchByUser/{id}:
  *  get:
- *      sumary : create a new user
+ *      sumary : search events by user
  *      tags : [Register]
  *      parameters:
  *          - in : path
@@ -62,9 +62,9 @@ router.post('/',[verifyToken], controller.registerEvent)
  *            description : user id
  *      responses:
  *          201:
- *              description : new user created!
+ *              description : ok
  *          400:
- *              description: error to create user
+ *              description: error to search events
  *      security:
  *	        - jwt: []
  */
@@ -74,7 +74,7 @@ router.post('/',[verifyToken], controller.registerEvent)
  * @swagger
  * /api/v1/event/searchByEvent/{id}:
  *  get:
- *      sumary : create a new user
+ *      sumary : search events by user
  *      tags : [Register]
  *      parameters:
  *          - in : path
@@ -85,9 +85,9 @@ router.post('/',[verifyToken], controller.registerEvent)
  *            description : event id
  *      responses:
  *          201:
- *              description : new user created!
+ *              description : search events by user
  *          400:
- *              description: error to create user
+ *              description: error to search events by user
  *      security:
  *	        - jwt: []
  */
@@ -97,13 +97,13 @@ router.post('/',[verifyToken], controller.registerEvent)
  * @swagger
  * /api/v1/event/usersByDay/{id}:
  *  get:
- *      sumary : create a new user
+ *      sumary : search user by days in events
  *      tags : [Register]
  *      responses:
  *          201:
- *              description : new user created!
+ *              description : search user by days in events
  *          400:
- *              description: error to create user
+ *              description: error to search user by days in events
  *      security:
  *	        - jwt: []
  */

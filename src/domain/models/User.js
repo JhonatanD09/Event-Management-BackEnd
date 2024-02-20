@@ -39,8 +39,20 @@ const comparePass = async (password, receivedPass) => {
 
 const createDefaulUser = async () =>{
     const verifyUsers = (await pool).query('SELECT * FROM users ')
-    console.log(verifyUsers)
-    // (await pool).query('INSERT INTO USERS SET ?')
+    const userDef = {
+        name: 'Admin',
+        email: 'Admin@gmail.com',
+        password: 'admin',
+        address: 'calle 12',
+        phone: '3203961541',
+        id_rol: 1,
+        id_city: 1,
+    }
+    verifyUsers.then(async (res)=>{
+        if(res[0].length==0){
+            (await pool).query('INSERT INTO users SET? ',[userDef])
+        }
+    })
 }
 
 module.exports = {
