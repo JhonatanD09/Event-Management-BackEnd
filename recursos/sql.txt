@@ -1,0 +1,88 @@
+CREATE SCHEMA `eventmanagement` ;
+
+CREATE USER 'event'@'localhost' IDENTIFIED BY '1234event';
+
+GRANT ALL PRIVILEGES ON * . * TO 'event'@'localhost';
+
+FLUSH PRIVILEGES;
+
+USE eventmanagement;
+
+CREATE TABLE `countries` (
+  `id_country` int NOT NULL ,
+  `country_name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id_country`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `states` (
+  `id_state` int NOT NULL ,
+  `state_name` varchar(100) DEFAULT NULL,
+  `id_country` int DEFAULT NULL,
+  PRIMARY KEY (`id_state`),
+  KEY `country_fk_idx` (`id_country`),
+  CONSTRAINT `country_fk` FOREIGN KEY (`id_country`) REFERENCES `countries` (`id_country`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `cities` (
+  `id_city` int NOT NULL ,
+  `name` varchar(100) DEFAULT NULL,
+  `id_state` int DEFAULT NULL,
+  PRIMARY KEY (`id_city`),
+  KEY `state_fk_idx` (`id_state`),
+  CONSTRAINT `state_fk` FOREIGN KEY (`id_state`) REFERENCES `states` (`id_state`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `roles` (
+  `id_rol` int NOT NULL ,
+  `name` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id_rol`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `events` (
+  `id_event` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `description` varchar(1000) NOT NULL,
+  `date` date NOT NULL,
+  `hour` varchar(15) DEFAULT NULL,
+  `address` varchar(200) NOT NULL,
+  `id_city` int NOT NULL,
+  PRIMARY KEY (`id_event`),
+  KEY `cities_fk_idx` (`id_city`),
+  CONSTRAINT `cities_events_fk` FOREIGN KEY (`id_city`) REFERENCES `cities` (`id_city`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `users` (
+  `id_user` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(200) NOT NULL,
+  `phone_number` varchar(20) NOT NULL,
+  `address` varchar(200) NOT NULL,
+  `id_rol` int NOT NULL,
+  `id_city` int DEFAULT NULL,
+  PRIMARY KEY (`id_user`),
+  KEY `roles_fk_idx` (`id_rol`),
+  KEY `cities_fk_idx` (`id_city`),
+  CONSTRAINT `cities_fk` FOREIGN KEY (`id_city`) REFERENCES `cities` (`id_city`),
+  CONSTRAINT `roles_fk` FOREIGN KEY (`id_rol`) REFERENCES `roles` (`id_rol`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `register_events` (
+  `id_user` int NOT NULL,
+  `id_event` int NOT NULL,
+  PRIMARY KEY (`id_user`,`id_event`),
+  KEY `events_register_fk_idx` (`id_event`),
+  CONSTRAINT `events_register_fk` FOREIGN KEY (`id_event`) REFERENCES `events` (`id_event`),
+  CONSTRAINT `users_register_fk` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `eventmanagement`.`countries` (`id_country`, `country_name`) VALUES ('1', 'Colombia');
+
+INSERT INTO `eventmanagement`.`states` (`id_state`, `state_name`, `id_country`) VALUES ('1', 'Bogota', '1');
+
+INSERT INTO `eventmanagement`.`cities` (`id_city`, `name`, `id_state`) VALUES ('1', 'Bogota', '1');
+
+INSERT INTO `eventmanagement`.`roles` (`id_rol`, `name`) VALUES ('1', 'ADMIN');
+
+INSERT INTO `eventmanagement`.`roles` (`id_rol`, `name`) VALUES ('2', 'USER');
+
